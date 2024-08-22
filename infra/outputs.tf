@@ -181,3 +181,6 @@ output "AZURE_ARM_MANAGEMENT_API" {
 output "MAX_CSV_FILE_SIZE" {
   value = var.maxCsvFileSize
 }
+output "MAX_INPUT_LENGTH" {
+  value = var.maxInputLength
+}

@@ -495,6 +495,11 @@ variable "maxCsvFileSize" {
   default = "20"
 }
 
+variable "maxInputLength" {
+  type    = number
+  default = 1000
+}
+
 variable "entraOwners" {
   type    = string
   default = ""
