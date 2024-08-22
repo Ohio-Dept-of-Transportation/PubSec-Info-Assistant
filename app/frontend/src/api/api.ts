@@ -17,10 +17,11 @@ import { ChatResponse,
     ResubmitItemRequest,
     GetFeatureFlagsResponse,
     getMaxCSVFileSizeType,
+    MaxInputLength,
     } from "./models";
-
+const apiUrl = ''
 export async function chatApi(options: ChatRequest, signal: AbortSignal): Promise<Response> {
-    const response = await fetch("/chat", {
+    const response = await fetch(apiUrl+"/chat", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -65,7 +66,7 @@ export function getCitationFilePath(citation: string): string {
 }
 
 export async function getBlobClientUrl(): Promise<string> {
-    const response = await fetch("/getblobclienturl", {
+    const response = await fetch(apiUrl+"/getblobclienturl", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -81,7 +82,7 @@ export async function getBlobClientUrl(): Promise<string> {
 }
 
 export async function getAllUploadStatus(options: GetUploadStatusRequest): Promise<AllFilesUploadStatus> {
-    const response = await fetch("/getalluploadstatus", {
+    const response = await fetch(apiUrl+"/getalluploadstatus", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -104,7 +105,7 @@ export async function getAllUploadStatus(options: GetUploadStatusRequest): Promi
 
 export async function deleteItem(options: DeleteItemRequest): Promise<boolean> {
     try {
-        const response = await fetch("/deleteItems", {
+        const response = await fetch(apiUrl+"/deleteItems", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -129,7 +130,7 @@ export async function deleteItem(options: DeleteItemRequest): Promise<boolean> {
 
 export async function resubmitItem(options: ResubmitItemRequest): Promise<boolean> {
     try {
-        const response = await fetch("/resubmitItems", {
+        const response = await fetch(apiUrl+"/resubmitItems", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -153,7 +154,7 @@ export async function resubmitItem(options: ResubmitItemRequest): Promise<boolea
 
 
 export async function getFolders(): Promise<string[]> {
-    const response = await fetch("/getfolders", {
+    const response = await fetch(apiUrl+"/getfolders", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -177,7 +178,7 @@ export async function getFolders(): Promise<string[]> {
 
 
 export async function getTags(): Promise<string[]> {
-    const response = await fetch("/gettags", {
+    const response = await fetch(apiUrl+"/gettags", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -349,7 +350,7 @@ export async function processAgentResponse(question: string): Promise<String> {
 }
 
 export async function logStatus(status_log_entry: StatusLogEntry): Promise<StatusLogResponse> {
-    var response = await fetch("/logstatus", {
+    var response = await fetch(apiUrl+"/logstatus", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -372,7 +373,7 @@ export async function logStatus(status_log_entry: StatusLogEntry): Promise<Statu
 }
 
 export async function getInfoData(): Promise<GetInfoResponse> {
-    const response = await fetch("/getInfoData", {
+    const response = await fetch(apiUrl+"/getInfoData", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -388,7 +389,7 @@ export async function getInfoData(): Promise<GetInfoResponse> {
 }
 
 export async function getWarningBanner(): Promise<GetWarningBanner> {
-    const response = await fetch("/getWarningBanner", {
+    const response = await fetch(apiUrl+"/getWarningBanner", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -404,7 +405,7 @@ export async function getWarningBanner(): Promise<GetWarningBanner> {
 }
 
 export async function getMaxCSVFileSize(): Promise<getMaxCSVFileSizeType> {
-    const response = await fetch("/getMaxCSVFileSize", {
+    const response = await fetch(apiUrl+"/getMaxCSVFileSize", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -439,7 +440,7 @@ export async function getCitationObj(citation: string): Promise<ActiveCitation> 
 
 export async function getApplicationTitle(): Promise<ApplicationTitle> {
     console.log("fetch Application Titless");
-    const response = await fetch("/getApplicationTitle", {
+    const response = await fetch(apiUrl+"/getApplicationTitle", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -455,8 +456,26 @@ export async function getApplicationTitle(): Promise<ApplicationTitle> {
     return parsedResponse;
 }
 
+export async function getMaxInputLength(): Promise<MaxInputLength> {
+    console.log("fetch Max Input Length");
+    const response = await fetch(apiUrl+"/getMaxInputLength", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+
+    const parsedResponse: MaxInputLength = await response.json();
+    if (response.status > 299 || !response.ok) {
+        console.log(response);
+        throw Error(parsedResponse.error || "Unknown error");
+    }
+    console.log(parsedResponse);
+    return parsedResponse;
+}
+
 export async function getAllTags(): Promise<GetTagsResponse> {
-    const response = await fetch("/getalltags", {
+    const response = await fetch(apiUrl+"/getalltags", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -473,7 +492,7 @@ export async function getAllTags(): Promise<GetTagsResponse> {
 }
 
 export async function getFeatureFlags(): Promise<GetFeatureFlagsResponse> {
-    const response = await fetch("/getFeatureFlags", {
+    const response = await fetch(apiUrl+"/getFeatureFlags", {
         method: "GET",
         headers: {
             "Content-Type": "application/json"

@@ -204,6 +204,11 @@ export type ApplicationTitle = {
     error?: string;
 };
 
+export type MaxInputLength = {
+    MAX_INPUT_LENGTH: number;
+    error?: string;
+};
+
 export type GetTagsResponse = {
     tags: string;
     error?: string;

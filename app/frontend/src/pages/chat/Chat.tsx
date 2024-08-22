@@ -11,7 +11,7 @@ import styles from "./Chat.module.css";
 import rlbgstyles from "../../components/ResponseLengthButtonGroup/ResponseLengthButtonGroup.module.css";
 import rtbgstyles from "../../components/ResponseTempButtonGroup/ResponseTempButtonGroup.module.css";
 
-import { chatApi, Approaches, ChatResponse, ChatRequest, ChatTurn, ChatMode, getFeatureFlags, GetFeatureFlagsResponse } from "../../api";
+import { chatApi, Approaches, ChatResponse, ChatRequest, ChatTurn, ChatMode, getFeatureFlags, GetFeatureFlagsResponse, MaxInputLength, getMaxInputLength } from "../../api";
 import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -49,6 +49,7 @@ const Chat = () => {
     const [defaultApproach, setDefaultApproach] = useState<number>(Approaches.ReadRetrieveRead);
     const [activeApproach, setActiveApproach] = useState<number>(Approaches.ReadRetrieveRead);
     const [featureFlags, setFeatureFlags] = useState<GetFeatureFlagsResponse | undefined>(undefined);
+    const [maxInputLengthResponse, setMaxInputLength] = useState<MaxInputLength | undefined>(undefined);
 
     const lastQuestionRef = useRef<string>("");
     const lastQuestionWorkCitationRef = useRef<{ [key: string]: { citation: string; source_path: string; page_number: string } }>({});
@@ -75,6 +76,16 @@ const Chat = () => {
         try {
             const fetchedFeatureFlags = await getFeatureFlags();
             setFeatureFlags(fetchedFeatureFlags);
+        } catch (error) {
+            // Handle the error here
+            console.log(error);
+        }
+    }
+
+    async function fetchMaxInputLength() {
+        try {
+            const fetchedMaxInputLength = await getMaxInputLength();
+            setMaxInputLength(fetchedMaxInputLength);
         } catch (error) {
             // Handle the error here
             console.log(error);
@@ -261,6 +272,7 @@ const Chat = () => {
     }
 
     useEffect(() => {fetchFeatureFlags()}, []);
+    useEffect(() => {fetchMaxInputLength()}, []);
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
 
     const onRetrieveCountChange = (_ev?: React.SyntheticEvent<HTMLElement, Event>, newValue?: string) => {
@@ -440,6 +452,7 @@ const Chat = () => {
                             clearOnSend
                             placeholder="Type a new question (e.g. Who are Microsoft's top executives, provided as a table?)"
                             disabled={isLoading}
+                            maxInputLength={maxInputLengthResponse?.MAX_INPUT_LENGTH || 1000}
                             onSend={question => makeApiRequest(question, defaultApproach, {}, {}, {})}
                             onAdjustClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)}
                             onInfoClick={() => setIsInfoPanelOpen(!isInfoPanelOpen)}

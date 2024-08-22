@@ -14,6 +14,7 @@ import pandas as pd
 from datetime import datetime, time, timedelta
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+#from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, StreamingResponse
 import openai
 from approaches.comparewebwithwork import CompareWebWithWork
@@ -101,8 +102,9 @@ ENV = {
     "ENABLE_MATH_ASSISTANT": "false",
     "ENABLE_TABULAR_DATA_ASSISTANT": "false",
     "ENABLE_MULTIMEDIA": "false",
-    "MAX_CSV_FILE_SIZE": "7"
-    }
+    "MAX_CSV_FILE_SIZE": "7",
+    "MAX_INPUT_LENGTH": 1000
+}
 
 for key, value in ENV.items():
     new_value = os.getenv(key)
@@ -264,6 +266,18 @@ app = FastAPI(
     version="0.1.0",
     docs_url="/docs",
 )
+origins = [
+    "http://localhost",
+    "http://localhost:5173"
+]
+
+#app.add_middleware(
+#    CORSMiddleware,
+#    allow_origins=origins,
+#    allow_credentials=True,
+#    allow_methods=["*"],
+#    allow_headers=["*"],
+#)
 
 @app.get("/", include_in_schema=False, response_class=RedirectResponse)
 async def root():
@@ -624,6 +638,19 @@ async def get_application_title():
     """
     response = {
             "APPLICATION_TITLE": ENV["APPLICATION_TITLE"]
+        }
+    return response
+
+# Return MAX_INPUT_LENGTH
+@app.get("/getMaxInputLength")
+async def get_max_input_length():
+    """Get the max input length
+    
+    Returns:
+        dict: A dictionary containing the max input length for prompts.
+    """
+    response = {
+            "MAX_INPUT_LENGTH": int(ENV["MAX_INPUT_LENGTH"])
         }
     return response
 

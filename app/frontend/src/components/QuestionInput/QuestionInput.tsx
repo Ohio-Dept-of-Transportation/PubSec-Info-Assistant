@@ -14,6 +14,7 @@ interface Props {
     disabled: boolean;
     placeholder?: string;
     clearOnSend?: boolean;
+    maxInputLength: number;
     onAdjustClick?: () => void;
     onInfoClick?: () => void;
     showClearChat?: boolean;
@@ -21,7 +22,7 @@ interface Props {
     onRegenerateClick?: () => void;
 }
 
-export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, onAdjustClick, showClearChat, onClearClick, onRegenerateClick }: Props) => {
+export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, maxInputLength, onAdjustClick, showClearChat, onClearClick, onRegenerateClick }: Props) => {
     const [question, setQuestion] = useState<string>("");
 
     const sendQuestion = () => {
@@ -46,7 +47,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, onAd
     const onQuestionChange = (_ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         if (!newValue) {
             setQuestion("");
-        } else if (newValue.length <= 1000) {
+        } else if (newValue.length <= maxInputLength) {
             setQuestion(newValue);
         }
     };
@@ -65,8 +66,8 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, onAd
 
     return (
         <Stack>
-            <Stack.Item>
-            <Stack horizontal className={styles.questionInputContainer}>
+            <Stack.Item className={styles.questionInputContainer}>
+            <Stack horizontal>
                 {showClearChat ? (
                     <div className={styles.questionClearButtonsContainer}>
                         <div
@@ -100,6 +101,11 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, onAd
                     >
                         <Send28Filled primaryFill="rgba(115, 118, 225, 1)" />
                     </div>
+                </div>
+            </Stack>
+            <Stack className={styles.questionInputLengthContainer}>
+                <div>
+                    {question.length.toLocaleString()}/{maxInputLength.toLocaleString()}
                 </div>
             </Stack>
             </Stack.Item>

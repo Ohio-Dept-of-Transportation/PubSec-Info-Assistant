@@ -120,6 +120,10 @@ jq -r  '
             "env_var": "MAX_CSV_FILE_SIZE"
         },
         {
+            "path": "MAX_INPUT_LENGTH",
+            "env_var": "MAX_INPUT_LENGTH"
+        },
+        {
             "path": "SERVICE_MANAGEMENT_REFERENCE",
             "env_var": "SERVICE_MANAGEMENT_REFERENCE"
         }
